@@ -1,17 +1,22 @@
 const colorStatus = (status) => {
   if(status === 'PENDING') 
     return {
-      color: 'text-[#FCDC2A]',
+      color: '#FFE866',
       body: 'Đang chờ xác nhận'
     };
-  if(status === 'DELAYED') 
+  if(status === 'DELIVERY') 
     return {
-      color: 'text-[#DD761C]',
-      body: 'Delay'
+      color: '#FFE866',
+      body: 'Đang di chuyển'
+    };
+  if(status === 'WORKING') 
+    return {
+      color: '#FFE9D0',
+      body: 'Đang làm việc'
     };
   if(status === 'COMPLETED') 
     return {
-      color: 'text-[#68D2E8]',
+      color: '#BFFBFF',
       body: 'Đã hoàn thành'
     };
   if(status.includes('CANCELLED')) {
@@ -19,13 +24,13 @@ const colorStatus = (status) => {
     if(status === 'CANCELLED_BY_CUSTOMER') body = 'Đã hủy bởi khách hàng';
     if(status === 'CANCELLED_BY_PROVIDER') body = 'Đã hủy bởi Kleenix';
     return {
-      color: 'text-[#FF5580]',
+      color: '#FFE3EA',
       body
     };
   }
   if(status === 'CONFIRMED') 
     return {
-      color: 'text-[#41B06E]',
+      color: '#D3FADE',
       body: 'Đã xác nhận'
     };
   return {

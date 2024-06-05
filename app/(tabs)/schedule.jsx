@@ -1,26 +1,42 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import {
   TouchableWithoutFeedback,
   View,
   Text,
   FlatList,
+  RefreshControl,
+  Alert
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { format, addDays, addWeeks, startOfWeek } from 'date-fns';
+import { format, addDays, addWeeks, startOfWeek, startOfDay, endOfDay, subDays } from 'date-fns';
 import Swiper from 'react-native-swiper';
-import ScheduleCard from '../../../components/ScheduleCard';
-import { scheduleApi } from '../../../services/api';
-import useFetchData from '../../../services/useFetchData';
-import LoadingScreen from '../../../components/LoadingScreen';
+import ScheduleCard from '../../components/ScheduleCard';
+import { scheduleApi } from '../../services/api';
+import useFetchData from '../../services/useFetchData';
+import LoadingScreen from '../../components/LoadingScreen';
+import { fDate, fConvertDays } from '../../utils/format-time';
+import EmptyState from '../../components/EmptyState';
+import { useGlobalContext } from '../../context/GlobalProvider';
 
 export default function Schedule() {
+  const { authenticated } = useGlobalContext()
   const swiper = useRef();
   const [value, setValue] = useState(new Date());
   const [week, setWeek] = useState(0);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const { data: listSchedule, isLoading, refetch } = useFetchData(scheduleApi.getListSchedule(startDate, endDate));
+  const [startDate, setStartDate] = useState(subDays(new Date(), 1));
+  const [endDate, setEndDate] = useState(subDays(new Date(), 1));
+  const { data: listSchedule, isLoading, refetch } = useFetchData(authenticated ? scheduleApi.getListSchedule(startDate, endDate) : null);
+  const [refreshing, setRefreshing] = useState(false);
   
+  useEffect(() => {
+    refetch()
+  }, [startDate, endDate])
+  
+  const handleChangDay = (date) => {
+    setValue(date);
+    setStartDate(date);
+    setEndDate(date);
+  }
 
   const weeks = useMemo(() => {
     const start = startOfWeek(addWeeks(new Date(), week), { weekStartsOn: 1 });
@@ -30,22 +46,24 @@ export default function Schedule() {
         const date = addDays(addWeeks(start, adj), index);
   
         return {
-          weekday: format(date, 'eee'),
+          weekday: fConvertDays(fDate(date, 'eee')),
           date: date,
         };
       });
     });
   }, [week]);
   
-  if(isLoading) {
-    return <LoadingScreen />;
-  }
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
 
   return (
     <SafeAreaView className='h-full'>
       <View className='flex-1 py-6'>
         <View className='px-4'>
-          <Text className='text-[#1d1d1d] mb-3 text-3xl font-psemibold'>Your Schedule</Text>
+          <Text className='text-secondary-100 mb-3 text-3xl font-psemibold'>Công việc</Text>
         </View>
 
         <View className='flex-1 px-3 flex-row items-center max-h-16'>
@@ -74,9 +92,9 @@ export default function Schedule() {
                   return (
                     <TouchableWithoutFeedback
                       key={dateIndex}
-                      onPress={() => setValue(item.date)}>
+                      onPress={() => handleChangDay(item.date)}>
                       <View
-                        className='flex-1 h-14 mx-1 items-center flex-col border border-gray-200 rounded-lg px-1 py-1'
+                        className='flex-1 h-14 mx-1 items-center flex-col border border-blue-400 rounded-lg px-1 py-1'
                         style={[
                           isActive && {
                             backgroundColor: '#111',
@@ -107,14 +125,23 @@ export default function Schedule() {
           </Swiper>
         </View>
 
-        <View className='flex-1 px-4 py-6'>
-          <Text className='text-[#999999] mb-3 text-base font-pmedium'>{value.toDateString()}</Text>
+        <View className='flex-1 px-4 pt-6'>
+          <Text className='text-secondary-200 mb-3 text-base font-pmedium'>{fDate(value.toDateString(), 'PPPP')}</Text>
           <FlatList 
             data={listSchedule}
             keyExtractor={item => item.id}
             renderItem={({ item, index }) => (
-              <ScheduleCard key={index} schedule={item} />
+              <ScheduleCard key={index} schedule={item} refresh={onRefresh}/>
             )}
+            ListEmptyComponent={() => (
+              <View className='mt-12'>
+                <EmptyState 
+                  title="Không có công việc nào!"
+                  subtitle="Vui lòng quay lại sau!"
+                />
+              </View>
+            )}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           />
           
         </View>

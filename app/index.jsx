@@ -10,13 +10,17 @@ import LoadingScreen from '../components/LoadingScreen';
 import CustomButton from '../components/CustomButton';
 
 export default function App() {
-  const { isLoading, isLoggedIn } = useGlobalContext();
+  const { authenticated, loading, user } = useGlobalContext();
   
-  if(!isLoading && isLoggedIn) return <Redirect href='/schedule'/>
+  if(!loading && authenticated) {
+    if(user) {
+      return <Redirect href='/schedule'/>
+    }
+  }
   
   return (
     <>
-      {isLoading ? <LoadingScreen /> : (
+      {loading ? <LoadingScreen /> : (
         <SafeAreaView className='bg-primary h-full'>
           <ScrollView contentContainerStyle={{ height: '100%'}}>
             <View className='w-full justify-center items-center min-h-[85vh] px-4'>
@@ -33,8 +37,8 @@ export default function App() {
               />
               
               <View className='relative mt-5'>
-                <Text className='text-3xl text-white font-bold text-center'>
-                  Discover Endless Possibilities with {' '}
+                <Text className='text-3xl text-black font-bold text-center'>
+                  Khám phá dịch vụ không giới hạn với{' '}
                   <Text className='text-secondary-200'>Kleenix</Text>
                 </Text>
                 <Image 
@@ -44,12 +48,12 @@ export default function App() {
                 />
               </View>
               
-              <Text className='text-sm font-pregular text-gray-100 mt-7 text-center'>
-                Where creativity meets innovation: embark on a journey of limitless exploration with Kleenix
+              <Text className='text-sm font-pregular text-black-200 mt-7 text-center'>
+                Kleenix đặt giúp việc dễ dàng, uy tín, chuyên nghiệp và tiết kiệm
               </Text>
               
               <CustomButton 
-                title="Continue with Email"
+                title="Khám phá"
                 handlePress={() => router.push('/sign-in')}
                 containerStyles='w-full mt-7'
               />

@@ -5,10 +5,18 @@ const assignmentApi = {
     const { data } = await axiosInstance.get(`${endpoints.assignment.listBooking}?status=${status}&startDate=${startDate ? startDate : ''}&endDate=${endDate ? endDate : ''}`);
     return data.result;
   },
-  newBooking: async(eventData) => {
-    const { data } = await axiosInstance.post(endpoints.assignment.new, eventData);
+  acceptBooking: async(bookingId) => {
+    const { data } = await axiosInstance.post(endpoints.assignment.acceptBooking, { bookingId });
     return data.result;
-  }
+  },
+  updateStatusBooking: async(bookingId) => {
+    const { data } = await axiosInstance.post(endpoints.assignment.updateStatusBooking, { bookingId });
+    return data.result;
+  },
+  completedBooking: async(bookingId) => {
+    const { data } = await axiosInstance.post(endpoints.assignment.completedBooking, { bookingId });
+    return data.result;
+  },
 }
 
 export default assignmentApi;

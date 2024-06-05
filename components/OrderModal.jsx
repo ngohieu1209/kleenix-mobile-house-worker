@@ -23,7 +23,7 @@ const OrderModal = ({ visible, onClose, onSelect, order, address, user, service,
         <View className='flex my-6 px-4 space-y-6'>
           <View className='flex-row'>
             <View className='flex-1'>
-              <Text className='text-white font-pmedium text-base'>
+              <Text className='text-secondary-100 font-pmedium text-base'>
                 Đơn hàng
               </Text>
             </View>

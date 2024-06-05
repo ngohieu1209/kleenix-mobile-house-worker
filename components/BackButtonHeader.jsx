@@ -13,11 +13,12 @@ const BackButtonHeader = ({ title }) => {
       >
         <Image 
           source={icons.leftArrow}
+          tintColor='#1E1E2D'
           className='w-5 h-5'
           resizeMode='contain'
         />
       </TouchableOpacity>
-      <Text className='text-white font-pmedium text-base'>{title}</Text>
+      <Text className='text-black font-pmedium text-base'>{title}</Text>
     </View>
   )
 }

@@ -21,6 +21,16 @@ import clock from "../assets/icons/clock.png";
 import clockColor from "../assets/icons/clock-color.png";
 import note from "../assets/icons/note.png";
 import boxPlus from "../assets/icons/box-plus.png";
+import closeRound from "../assets/icons/close-round.png";
+import rightContinue from "../assets/icons/continue.png";
+import cashlessPayment from "../assets/icons/cashless-payment.png";
+import pen from "../assets/icons/pen.png";
+import helpDesk from "../assets/icons/help-desk.png";
+import facebook from "../assets/icons/facebook.png";
+import tiktok from "../assets/icons/tik-tok.png";
+import zalo from "../assets/icons/zalo.png";
+import giftBox from "../assets/icons/gift-box.png";
+import toDoList from "../assets/icons/to-do-list.png";
 
 export default {
   play,
@@ -46,4 +56,14 @@ export default {
   clockColor,
   note,
   boxPlus,
+  closeRound,
+  rightContinue,
+  cashlessPayment,
+  pen,
+  helpDesk,
+  facebook,
+  tiktok,
+  zalo,
+  giftBox,
+  toDoList,
 };

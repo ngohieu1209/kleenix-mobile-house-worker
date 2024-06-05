@@ -9,9 +9,10 @@ import { images } from '../../constants'
 import FormField from '../../components/FormField'
 import CustomButton from '../../components/CustomButton'
 import { authApi } from '../../services/api'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const SignIn = () => {
-  const { setUser, setIsLoggedIn } = useGlobalContext()
+  const { login } = useGlobalContext();
   const [form, setForm] = useState({
     username: '',
     password: ''
@@ -25,11 +26,7 @@ const SignIn = () => {
     setIsSubmitting(true)
     
     try {
-      const data = await authApi.login(form)
-      setUser(data.result.user);
-      setIsLoggedIn(true)
-      
-      router.replace('/schedule')
+      await login(form.username, form.password)
     } catch (error) {
       Alert.alert('Error', error.message)
     } finally {
@@ -48,9 +45,15 @@ const SignIn = () => {
           />
           
           <Text
-            className='text-2xl text-white text-semi  bold mt-10 font-psemibold'
+            className='text-2xl text-black mt-10 font-psemibold'
           >
             Đăng nhập Kleenix
+          </Text>
+          
+          <Text
+            className='text-xl text-secondary mt-2 font-psemibold'
+          >
+            dành cho giúp việc
           </Text>
           
           <FormField 

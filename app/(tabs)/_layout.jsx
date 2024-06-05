@@ -1,7 +1,7 @@
 import { View, Text, Image } from 'react-native'
 import { Tabs, Redirect } from 'expo-router'
 
-import { icons } from '../../../constants'
+import { icons } from '../../constants'
 
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
@@ -25,12 +25,12 @@ const TabsLayout = () => {
       <Tabs
         screenOptions={{
           tabBarShowLabel: false,
-          tabBarActiveTintColor: '#FFA001',
-          tabBarInactiveTintColor: '#CDCDE0',
+          tabBarActiveTintColor: '#0066FF',
+          tabBarInactiveTintColor: '#161622',
           tabBarStyle: {
-            backgroundColor: '#161622',
+            backgroundColor: '#FFF5FF',
             borderTopWidth: 1,
-            borderTopColor: '#232533',
+            borderTopColor: '#FFE8F7',
             height: 84
           }
         }}
@@ -41,7 +41,7 @@ const TabsLayout = () => {
             title: 'Schedule', 
             headerShown: false, 
             tabBarIcon: ({ color, focused}) => (
-              <TabIcon icon={icons.profile} color={color} name="Schedule" focused={focused} />
+              <TabIcon icon={icons.calendar} color={color} name="Công việc" focused={focused} />
             )}}
         />
         <Tabs.Screen
@@ -50,7 +50,7 @@ const TabsLayout = () => {
             title: 'Activities', 
             headerShown: false, 
             tabBarIcon: ({ color, focused}) => (
-              <TabIcon icon={icons.home} color={color} name="Activities" focused={focused} />
+              <TabIcon icon={icons.toDoList} color={color} name="Hoạt động" focused={focused} />
             )}}
         />
         <Tabs.Screen
@@ -59,7 +59,7 @@ const TabsLayout = () => {
             title: 'Profile', 
             headerShown: false, 
             tabBarIcon: ({ color, focused}) => (
-              <TabIcon icon={icons.profile} color={color} name="Profile" focused={focused} />
+              <TabIcon icon={icons.profile} color={color} name="Tài khoản" focused={focused} />
             )}}
         />
       </Tabs>

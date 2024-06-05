@@ -10,6 +10,10 @@ const FormField = ({ title, icon, value, placeholder, handleChangeText, otherSty
     handleChangeText('')
   }
   
+  const containsPassword = (str) => {
+    return str.toLowerCase().includes("mật khẩu");
+  }
+  
   return (
     <View className={`space-y-2 ${otherStyles}`}>
       <View className='flex-row space-x-2'>
@@ -20,27 +24,27 @@ const FormField = ({ title, icon, value, placeholder, handleChangeText, otherSty
             resizeMode='contain'
           />
         )}
-        <Text className='text-base text-gray-100 font-pmedium'>
+        <Text className='text-base text-black-200 font-pmedium'>
           {title}
         </Text>
       </View>
       <View 
-        className={`${(title === 'Ghi chú') ? 'h-32 items-start' : 'h-16 items-center'} border-2 border-black-200 w-full px-4 bg-black-100 rounded-2xl focus:border-secondary flex-row`}
+        className={`${(title === 'Ghi chú') ? 'h-32 items-start' : 'h-16 items-center'} border-2 border-black-200 w-full px-4 bg-white rounded-2xl focus:border-secondary flex-row`}
       >
         <TextInput 
-          className='flex-1 text-white font-psemibold text-base'
+          className='flex-1 text-black font-psemibold text-base'
           value={value}
           placeholder={placeholder}
           placeholderTextColor='#7b7b8b'
           onChangeText={handleChangeText}
-          secureTextEntry={ title === 'Mật khẩu' && !showPassword}
+          secureTextEntry={ containsPassword(title) && !showPassword}
           onSubmitEditing={ title === 'Tìm kiếm địa điểm' ? onSubmit : null}
           returnKeyType={ title === 'Tìm kiếm địa điểm' ? 'search' : 'done'}
           multiline={title === 'Ghi chú'}
           numberOfLines={title === 'Ghi chú' ? 4 : 1}
         />
         
-        {title === 'Mật khẩu' && (
+        {containsPassword(title) && (
           <TouchableOpacity
             onPress={() => setShowPassword(!showPassword)}
           >

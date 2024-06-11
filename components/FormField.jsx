@@ -11,7 +11,10 @@ const FormField = ({ title, icon, value, placeholder, handleChangeText, otherSty
   }
   
   const containsPassword = (str) => {
-    return str.toLowerCase().includes("mật khẩu");
+    if(str) {
+      return str.toLowerCase().includes("mật khẩu");
+    }
+    return false;
   }
   
   return (
@@ -29,7 +32,7 @@ const FormField = ({ title, icon, value, placeholder, handleChangeText, otherSty
         </Text>
       </View>
       <View 
-        className={`${(title === 'Ghi chú') ? 'h-32 items-start' : 'h-16 items-center'} border-2 border-black-200 w-full px-4 bg-white rounded-2xl focus:border-secondary flex-row`}
+        className={`${(title === 'Ghi chú') ? 'h-auto items-center' : 'h-16 items-center'} border-2 border-black-200 w-full px-4 bg-white rounded-2xl focus:border-secondary flex-row`}
       >
         <TextInput 
           className='flex-1 text-black font-psemibold text-base'

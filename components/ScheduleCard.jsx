@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { router } from 'expo-router'
 import { fDate } from '../utils/format-time';
@@ -6,6 +6,7 @@ import { fAddress } from '../utils/format-address';
 import colorStatus from '../constants/color-status'
 import ScheduleModal from './ScheduleModal';
 import { assignmentApi } from '../services/api';
+import Toast from 'react-native-toast-message';
 
 const ScheduleCard = ({ schedule, refresh }) => {
   const [isVisibleModalLocation, setIsVisibleModalLocation] = useState(false)
@@ -34,8 +35,11 @@ const ScheduleCard = ({ schedule, refresh }) => {
       setTempStatus(data.status)
       setIsVisibleModalLocation(false)
     } catch (error) {
-      Alert.alert('Lỗi', error.message)
-      console.log('winter-accept-error', error)  
+      console.log('update-status-booking-error', error)
+      Toast.show({
+        type: 'error',
+        text1: 'Có lỗi xảy ra khi cập nhật trạng thái',
+      });
     } finally {
       setIsLoading(false)
     }

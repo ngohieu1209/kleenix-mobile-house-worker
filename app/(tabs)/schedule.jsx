@@ -1,12 +1,13 @@
-import React, { useState, useRef, useMemo, useEffect } from 'react';
+import React, { useState, useRef, useMemo, useEffect, useCallback } from 'react';
 import {
   TouchableWithoutFeedback,
   View,
   Text,
   FlatList,
   RefreshControl,
-  Alert
+  ActivityIndicator
 } from 'react-native';
+import { useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { format, addDays, addWeeks, startOfWeek, startOfDay, endOfDay, subDays } from 'date-fns';
 import Swiper from 'react-native-swiper';
@@ -21,6 +22,7 @@ import { useGlobalContext } from '../../context/GlobalProvider';
 export default function Schedule() {
   const { authenticated } = useGlobalContext()
   const swiper = useRef();
+  const [isDelay, setIsDelay] = useState(false);
   const [value, setValue] = useState(new Date());
   const [week, setWeek] = useState(0);
   const [startDate, setStartDate] = useState(subDays(new Date(), 1));
@@ -28,11 +30,11 @@ export default function Schedule() {
   const { data: listSchedule, isLoading, refetch } = useFetchData(authenticated ? scheduleApi.getListSchedule(startDate, endDate) : null);
   const [refreshing, setRefreshing] = useState(false);
   
-  useEffect(() => {
-    refetch()
-  }, [startDate, endDate])
-  
   const handleChangDay = (date) => {
+    setIsDelay(true);
+    setTimeout(() => {
+      setIsDelay(false);
+    }, 1000);
     setValue(date);
     setStartDate(date);
     setEndDate(date);
@@ -58,6 +60,14 @@ export default function Schedule() {
     await refetch();
     setRefreshing(false);
   };
+  
+  useFocusEffect(
+    useCallback(() => {
+      if(authenticated) {
+        refetch();
+      }
+    }, [authenticated, startDate, endDate])
+  )
 
   return (
     <SafeAreaView className='h-full'>
@@ -130,9 +140,16 @@ export default function Schedule() {
           <FlatList 
             data={listSchedule}
             keyExtractor={item => item.id}
-            renderItem={({ item, index }) => (
-              <ScheduleCard key={index} schedule={item} refresh={onRefresh}/>
-            )}
+            renderItem={({ item, index }) => {
+              if(isLoading || isDelay) {
+                return (
+                  <View className='mt-12'>
+                    <ActivityIndicator key={index} color={'#0066FF'} size={32} />
+                  </View>
+                )
+              }
+              return <ScheduleCard key={index} schedule={item} refresh={onRefresh}/>
+            }}
             ListEmptyComponent={() => (
               <View className='mt-12'>
                 <EmptyState 

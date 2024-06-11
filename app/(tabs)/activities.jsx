@@ -1,5 +1,6 @@
 import { View, Text, FlatList, Image, ActivityIndicator, TouchableOpacity, RefreshControl } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+import { useFocusEffect } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import images from '../../constants/images'
 
@@ -58,9 +59,13 @@ const Activities = () => {
     setIsFilter(false);
   }
   
-  useEffect(() => {
-    refetch()
-  }, [status, startDate, endDate])
+  useFocusEffect(
+    useCallback(() => {
+      if(authenticated) {
+        refetch();
+      }
+    }, [authenticated, status, startDate, endDate])
+  )
   
   const onRefresh = async () => {
     setRefreshing(true);

@@ -3,6 +3,8 @@ import { SplashScreen, Stack } from 'expo-router'
 import { useFonts } from 'expo-font'
 
 import GlobalProvider from '../context/GlobalProvider'
+import Toast from 'react-native-toast-message'
+import toastConfig from '../utils/toastConfig'
 
 SplashScreen.preventAutoHideAsync();
 
@@ -40,6 +42,7 @@ const RootLayout = () => {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }}/>
         <Stack.Screen name="edit-information/index" options={{ headerShown: false }} />
       </Stack>
+      <Toast config={toastConfig} />
     </GlobalProvider>
   )
 }

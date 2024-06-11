@@ -1,4 +1,4 @@
-import { View, Text, Modal, TouchableOpacity, Image, Alert, ActivityIndicator, ScrollView } from 'react-native'
+import { View, Text, Modal, TouchableOpacity, Image, ScrollView } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { icons } from '../constants'
 import { SafeAreaView } from 'react-native-safe-area-context'

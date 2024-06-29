@@ -32,6 +32,10 @@ import zalo from "../assets/icons/zalo.png";
 import giftBox from "../assets/icons/gift-box.png";
 import toDoList from "../assets/icons/to-do-list.png";
 import notification from "../assets/icons/notification.png";
+import camera from "../assets/icons/camera.png";
+import gallery from "../assets/icons/gallery.png";
+import email from "../assets/icons/email.png";
+import telephoneCall from "../assets/icons/telephone-call.png";
 
 export default {
   play,
@@ -68,4 +72,8 @@ export default {
   giftBox,
   toDoList,
   notification,
+  camera,
+  gallery,
+  email,
+  telephoneCall,
 };

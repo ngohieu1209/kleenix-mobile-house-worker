@@ -1,7 +1,7 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, ToastAndroid } from 'react-native'
 import { router } from 'expo-router'
 import React, { useState } from 'react'
-import { REACT_APP_BASE_ICON_URL } from '@env'
+import { EXPO_PUBLIC_BASE_ICON_URL } from '@env'
 
 import { fCurrency } from '../utils/format-currency'
 import { fMinutesToHours, fDateTime } from '../utils/format-time'
@@ -18,7 +18,7 @@ const ActivityCard = ({ activity }) => {
   const { id, createdAt, duration, note, dateTime, totalPrice, address, bookingPackage, bookingExtraService, status, paymentStatus } = activity;
   const { service } = bookingPackage[0].package;
   const { body: statusBody, color: statusColor } = colorStatus(status);
-  const iconURL = `${REACT_APP_BASE_ICON_URL}/${service.icon}`
+  const iconURL = `${process.env.EXPO_PUBLIC_BASE_ICON_URL}/${service.icon}`
   
   const submit = async () => {
     setIsLoading(true)
@@ -27,10 +27,7 @@ const ActivityCard = ({ activity }) => {
       router.replace('/schedule')
     } catch (error) {
       console.log('accept-booking-error', error)
-      Toast.show({
-        type: 'error',
-        text1: 'Có lỗi xảy ra khi hủy đơn',
-      }); 
+      ToastAndroid.show(error.message || 'Nhận lịch đặt thất bại', ToastAndroid.LONG);
     } finally {
       setIsLoading(false)
     }

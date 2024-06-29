@@ -32,7 +32,6 @@ const reducer = (state, action) => {
     };
   }
   if(action.type === 'UPDATE') {
-    console.log('winter-action', action.payload)
     return {
       ...state,
       user: {

@@ -153,8 +153,8 @@ export default function Schedule() {
             ListEmptyComponent={() => (
               <View className='mt-12'>
                 <EmptyState 
-                  title="Không có công việc nào!"
-                  subtitle="Vui lòng quay lại sau!"
+                  title="Không tìm thấy dữ liệu!"
+                  subtitle="Không có công việc nào!"
                 />
               </View>
             )}

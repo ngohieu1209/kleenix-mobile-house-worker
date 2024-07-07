@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import { router } from 'expo-router'
+import React, { useState, useEffect, useCallback } from 'react'
+import { router, useFocusEffect } from 'expo-router'
 import { fDate } from '../utils/format-time';
 import { fAddress } from '../utils/format-address';
 import colorStatus from '../constants/color-status'
@@ -19,9 +19,11 @@ const ScheduleCard = ({ schedule, refresh }) => {
   const { body: statusBody, color: statusColor } = colorStatus(tempStatus || status);
   const [isLoading, setIsLoading] = useState(false)
   
-  useEffect(() => {
-    setTempStatus(status)
-  }, [])
+  useFocusEffect(
+    useCallback(() => {
+      setTempStatus(status)
+    }, [status])
+  )
   
   const submit = async () => {
     setIsLoading(true)

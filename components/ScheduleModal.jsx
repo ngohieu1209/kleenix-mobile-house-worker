@@ -7,12 +7,13 @@ import { fDateTime } from '../utils/format-time'
 import { fCurrency } from '../utils/format-currency';
 import { fAddress } from '../utils/format-address';
 import { addMinutes } from 'date-fns';
+import { fCodeBooking } from '../utils/format-string';
 
 const ScheduleModal = ({ schedule, visible, onClose, onSelect }) => {
   const [isLoading, setIsLoading] = useState(false);
   
   const { id, assignedTime, startTime, endTime, booking } = schedule;
-  const { address, bookingPackage, bookingExtraService, totalPrice, note, createdAt: bookingCreatedAt, status, paymentStatus, customerPromotion } = booking;
+  const { address, bookingPackage, bookingExtraService, totalPrice, note, createdAt: bookingCreatedAt, status, paymentStatus, customerPromotion, id: bookingId } = booking;
   const { customer } = address;
   const selectedPromotion = customerPromotion.length > 0 ? customerPromotion[0] : null;
   
@@ -27,7 +28,7 @@ const ScheduleModal = ({ schedule, visible, onClose, onSelect }) => {
         <View className='flex-row'>
           <View className='flex-1'>
             <Text className='text-secondary-100 font-pmedium text-base'>
-              Chi tiết lịch đặt
+              Chi tiết lịch đặt: #{fCodeBooking(bookingId)}
             </Text>
           </View>
           <TouchableOpacity onPress={handleClose}>

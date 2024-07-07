@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { format, addDays, addWeeks, startOfWeek, startOfDay, endOfDay, subDays } from 'date-fns';
+import { isToday, addDays, addWeeks, startOfWeek, startOfDay, endOfDay, subDays } from 'date-fns';
 import Swiper from 'react-native-swiper';
 import ScheduleCard from '../../components/ScheduleCard';
 import { scheduleApi } from '../../services/api';
@@ -29,6 +29,7 @@ export default function Schedule() {
   const [endDate, setEndDate] = useState(subDays(new Date(), 1));
   const { data: listSchedule, isLoading, refetch } = useFetchData(authenticated ? scheduleApi.getListSchedule(startDate, endDate) : null);
   const [refreshing, setRefreshing] = useState(false);
+  const [focusScreen, setFocusScreen] = useState(true);
   
   const handleChangDay = (date) => {
     setIsDelay(true);
@@ -68,6 +69,16 @@ export default function Schedule() {
       }
     }, [authenticated, startDate, endDate])
   )
+  
+  useFocusEffect(
+    useCallback(() => {
+      setFocusScreen(true);
+      refetch();
+      return () => {
+        setFocusScreen(false);
+      }
+    }, [focusScreen])
+  )
 
   return (
     <SafeAreaView className='h-full'>
@@ -97,14 +108,15 @@ export default function Schedule() {
             {weeks.map((dates, index) => (
               <View className='w-full flex-row items-start justify-between px-3' key={index}>
                 {dates.map((item, dateIndex) => {
-                  const isActive =
-                    value.toDateString() === item.date.toDateString();
+                  const isActive = value.toDateString() === item.date.toDateString();
+                  const isCurrentDay = isToday(item.date);
                   return (
                     <TouchableWithoutFeedback
                       key={dateIndex}
-                      onPress={() => handleChangDay(item.date)}>
+                      onPress={() => handleChangDay(item.date)}
+                    >
                       <View
-                        className='flex-1 h-14 mx-1 items-center flex-col border border-blue-400 rounded-lg px-1 py-1'
+                        className={`flex-1 h-14 mx-1 items-center flex-col border ${isCurrentDay ? 'border-red-400' : 'border-blue-400'} rounded-lg px-1 py-1`}
                         style={[
                           isActive && {
                             backgroundColor: '#111',
